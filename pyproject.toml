@@ -18,7 +18,7 @@ classifiers = [
 license.text = "GPL-3.0-or-later"
 
 [project.urls]
-Homepage = "https://github.com/alexminza/maib-sdk-python"
-Issues = "https://github.com/alexminza/maib-sdk-python/issues"
-Repository = "https://github.com/alexminza/maib-sdk-python.git"
+Homepage = "https://github.com/alexminza/maib-ecommerce-sdk-python"
+Issues = "https://github.com/alexminza/maib-ecommerce-sdk-python/issues"
+Repository = "https://github.com/alexminza/maib-ecommerce-sdk-python"
 Documentation = "https://docs.maibmerchants.md"
