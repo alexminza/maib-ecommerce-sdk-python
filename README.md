@@ -13,7 +13,7 @@ pip install --upgrade maib-ecommerce-sdk
 Import SDK:
 
 ```python
-from maib_ecommerce_sdk import MAIBAuthRequest, MAIBAPIRequest
+from maib_ecommerce_sdk import MaibAuthRequest, MaibApiRequest
 ```
 
 Add project configuration:
@@ -30,7 +30,7 @@ MAIB_SIGNATURE_KEY = os.getenv('MAIB_SIGNATURE_KEY')
 ### Get Access Token with Project ID and Project Secret
 
 ```python
-maib_auth = MAIBAuthRequest.create().generate_token(MAIB_PROJECT_ID, MAIB_PROJECT_SECRET)
+maib_auth = MaibAuthRequest.create().generate_token(MAIB_PROJECT_ID, MAIB_PROJECT_SECRET)
 
 maib_token = maib_auth['accessToken']
 maib_refresh_token = maib_auth['refreshToken']
@@ -39,7 +39,7 @@ maib_refresh_token = maib_auth['refreshToken']
 ### Get Access Token with Refresh Token
 
 ```python
-maib_auth = MAIBAuthRequest.create().generate_token(maib_refresh_token)
+maib_auth = MaibAuthRequest.create().generate_token(maib_refresh_token)
 
 maib_token = maib_auth['accessToken']
 maib_refresh_token = maib_auth['refreshToken']
@@ -56,7 +56,7 @@ maib_pay_data = {
 }
 
 # Initiate Direct Payment
-maib_pay = MAIBAPIRequest.create().pay(maib_pay_data, maib_token)
+maib_pay = MaibApiRequest.create().pay(maib_pay_data, maib_token)
 
 maib_pay_url = maib_pay['payUrl']
 maib_pay_id = maib_pay['payId']
