@@ -5,7 +5,7 @@ import base64
 
 import requests
 
-#https://github.com/maib-ecomm/maib-sdk-php
+#This module is based on PHP SDK for maib ecommerce API https://github.com/maib-ecomm/maib-sdk-php
 
 class MAIBSDK:
     # maib ecommerce API base url
