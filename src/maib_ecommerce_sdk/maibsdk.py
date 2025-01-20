@@ -1,3 +1,5 @@
+"""Python SDK for maib ecommerce API"""
+
 import json
 import logging
 import hashlib
@@ -7,7 +9,7 @@ import requests
 
 #This module is based on PHP SDK for maib ecommerce API https://github.com/maib-ecomm/maib-sdk-php
 
-class MAIBSDK:
+class MaibSdk:
     # maib ecommerce API base url
     DEFAULT_BASE_URL = 'https://api.maibmerchants.md/v1/'
 
@@ -26,21 +28,25 @@ class MAIBSDK:
 
     DEFAULT_TIMEOUT = 30
 
-    _instance = None
-    base_url: str = None
+    __instance = None
+    __base_url: str = None
 
     def __init__(self):
-        self.base_url = MAIBSDK.DEFAULT_BASE_URL
+        self.__base_url = MaibSdk.DEFAULT_BASE_URL
 
     @staticmethod
     def get_instance():
-        if MAIBSDK._instance is None:
-            MAIBSDK._instance = MAIBSDK()
+        """Get the instance of MaibSdk (Singleton pattern)"""
 
-        return MAIBSDK._instance
+        if MaibSdk.__instance is None:
+            MaibSdk.__instance = MaibSdk()
 
-    def build_url(self, url: str, entity_id: str = None):
-        url = self.base_url + url
+        return MaibSdk.__instance
+
+    def __build_url(self, url: str, entity_id: str = None):
+        """Build the complete URL for the request"""
+
+        url = self.__base_url + url
 
         if entity_id:
             url = f'{url}/{entity_id}'
@@ -48,39 +54,46 @@ class MAIBSDK:
         return url
 
     def send_request(self, method: str, url: str, data: dict = None, token: str = None, entity_id: str = None):
+        """Send a request and parse the response."""
+
         auth = BearerAuth(token) if token else None
 
-        url = self.build_url(url=url, entity_id=entity_id)
-        logging.debug('MAIBSDK REQUEST', extra={'method': method, 'url': url, 'data': data})
-        with requests.request(method=method, url=url, json=data, auth=auth, timeout=MAIBSDK.DEFAULT_TIMEOUT) as response:
+        url = self.__build_url(url=url, entity_id=entity_id)
+        logging.debug('MaibSdk Request', extra={'method': method, 'url': url, 'data': data})
+        with requests.request(method=method, url=url, json=data, auth=auth, timeout=MaibSdk.DEFAULT_TIMEOUT) as response:
             response_json = response.json()
-            logging.debug('MAIBSDK RESPONSE', extra={'response_json': response_json})
+            logging.debug('MaibSdk Response', extra={'response_json': response_json})
             #response.raise_for_status()
             return response_json
 
-    def handle_response(self, response: dict, endpoint: str):
+    @staticmethod
+    def handle_response(response: dict, endpoint: str):
+        """Handles errors returned by the API."""
+
         response_ok = response.get('ok')
         if response_ok is not None and response_ok is True:
             response_result = response.get('result')
             if response_result is not None:
                 return response_result
 
-            raise MAIBPaymentException(f'Invalid response received from server for endpoint {endpoint}: missing \'result\' field.')
+            raise MaibPaymentException(f'Invalid response received from server for endpoint {endpoint}: missing \'result\' field.')
 
         response_errors = response.get('errors')
         if response_errors is not None:
             error = response_errors[0]
-            raise MAIBPaymentException(f'Error sending request to endpoint $endpoint: {error.get('errorMessage')} ({error.get('errorCode')})')
+            raise MaibPaymentException(f'Error sending request to endpoint $endpoint: {error.get('errorMessage')} ({error.get('errorCode')})')
 
-        raise MAIBPaymentException(f'Invalid response received from server for endpoint {endpoint}: missing \'ok\' and \'errors\' fields')
+        raise MaibPaymentException(f'Invalid response received from server for endpoint {endpoint}: missing \'ok\' and \'errors\' fields')
 
     @staticmethod
     def validate_callback_signature(callback_data: dict, signature_key: str):
-        #https://docs.maibmerchants.md/ro/notificari-pe-callback-url
+        """Validates the callback data signature."""
+        #https://docs.maibmerchants.md/en/notifications-on-callback-url
         #https://github.com/maib-ecomm/maib-sdk-php/blob/main/examples/callbackUrl.php
+
         callback_signature = callback_data.get('signature')
         if not callback_signature:
-            raise MAIBPaymentException('Missing callback signature')
+            raise MaibPaymentException('Missing callback signature')
 
         callback_result = callback_data['result']
         sorted_callback_result = {key: str(value) for key, value in sorted(callback_result.items())}
@@ -94,8 +107,9 @@ class MAIBSDK:
 
     @staticmethod
     def get_error_message(response: str):
-        error_message = ''
+        """Retrieves the error message from the API response."""
 
+        error_message = ''
         if response:
             response_obj = json.loads(response)
 
@@ -109,9 +123,10 @@ class MAIBSDK:
         return error_message
 
 #region Requests
-#https://stackoverflow.com/questions/29931671/making-an-api-call-in-python-with-an-api-that-requires-a-bearer-token
-#https://requests.readthedocs.io/en/latest/user/authentication/#new-forms-of-authentication
 class BearerAuth(requests.auth.AuthBase):
+    """Attaches HTTP Bearer Token Authentication to the given Request object."""
+    #https://requests.readthedocs.io/en/latest/user/authentication/#new-forms-of-authentication
+
     token: str = None
 
     def __init__(self, token: str):
@@ -123,9 +138,9 @@ class BearerAuth(requests.auth.AuthBase):
 #endregion
 
 #region Exceptions
-class MAIBTokenException(Exception):
+class MaibTokenException(Exception):
     pass
 
-class MAIBPaymentException(Exception):
+class MaibPaymentException(Exception):
     pass
 #endregion

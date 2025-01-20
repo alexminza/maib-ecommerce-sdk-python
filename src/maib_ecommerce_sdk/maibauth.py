@@ -1,21 +1,29 @@
-import logging
-from .maibsdk import MAIBSDK, MAIBTokenException
+"""Python SDK for maib ecommerce API"""
 
-class MAIBAuthRequest:
+import logging
+from .maibsdk import MaibSdk, MaibTokenException
+
+class MaibAuthRequest:
+    """Factory class responsible for creating new instances of the MaibAuth class."""
+
     @staticmethod
     def create():
-        client = MAIBSDK()
-        return MAIBAuth(client)
+        """Creates an instance of the MaibAuth class."""
 
-class MAIBAuth:
-    client: MAIBSDK = None
+        client = MaibSdk()
+        return MaibAuth(client)
 
-    def __init__(self, client: MAIBSDK):
-        self.client = client
+class MaibAuth:
+    __client: MaibSdk = None
+
+    def __init__(self, client: MaibSdk):
+        self.__client = client
 
     def generate_token(self, project_id: str = None, project_secret: str = None):
+        """Generates a new access token using the given project ID and secret or refresh token."""
+
         if project_id is None and project_secret is None:
-            raise MAIBTokenException('Project ID and Project Secret or Refresh Token are required.')
+            raise MaibTokenException('Project ID and Project Secret or Refresh Token are required.')
 
         post_data = {}
         if project_id is not None and project_secret is not None:
@@ -25,10 +33,10 @@ class MAIBAuth:
             post_data['refreshToken'] = project_id
 
         try:
-            response = self.client.send_request('POST', MAIBSDK.GET_TOKEN, post_data)
+            response = self.__client.send_request('POST', MaibSdk.GET_TOKEN, post_data)
         except Exception as ex:
-            logging.exception('MAIBAuth.generate_token')
-            raise MAIBTokenException(f'HTTP error while sending POST request to endpoint {MAIBSDK.GET_TOKEN}') from ex
+            logging.exception('MaibAuth.generate_token')
+            raise MaibTokenException(f'HTTP error while sending POST request to endpoint {MaibSdk.GET_TOKEN}') from ex
 
-        result = self.client.handle_response(response, MAIBSDK.GET_TOKEN)
+        result = self.__client.handle_response(response, MaibSdk.GET_TOKEN)
         return result
