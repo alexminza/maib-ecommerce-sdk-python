@@ -59,3 +59,5 @@ maib_pay = MaibApiRequest.create().pay(maib_pay_data, maib_token)
 maib_pay_url = maib_pay['payUrl']
 maib_pay_id = maib_pay['payId']
 ```
+
+For more examples see [PHP SDK for maib ecommerce API](https://github.com/maib-ecomm/maib-sdk-php)
