@@ -32,7 +32,9 @@
                 "upload",
                 "--repository",
                 "${input:twineRepository}",
-                "dist/*"
+                "dist/*",
+                "--skip-existing",
+                "--verbose"
             ],
             "problemMatcher": [],
             "options": {
