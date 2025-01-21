@@ -1,12 +1,12 @@
 [project]
 name = "maib-ecommerce-sdk"
-version = "0.0.1"
+version = "1.0.0"
 authors = [
   { name="Alexander Minza" },
 ]
 description = "Python SDK for maib ecommerce API"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 keywords = ["maib", "ecommerce", "payments", "api", "sdk", "python"]
 classifiers = [
     "Intended Audience :: Developers",

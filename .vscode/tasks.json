@@ -31,13 +31,25 @@
                 "twine",
                 "upload",
                 "--repository",
-                "testpypi",
+                "${input:twineRepository}",
                 "dist/*"
             ],
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}"
             }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "twineRepository",
+            "type": "pickString",
+            "description": "Twine Repository",
+            "default": "testpypi",
+            "options": [
+                "testpypi",
+                "pypi"
+            ]
         }
     ]
 }

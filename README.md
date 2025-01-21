@@ -1,6 +1,4 @@
-![maib](https://www.maib.md/images/logo.svg)
 # Python SDK for maib ecommerce API
-
 maib e-commerce API docs: [https://docs.maibmerchants.md](https://docs.maibmerchants.md)
 
 ## Installation
