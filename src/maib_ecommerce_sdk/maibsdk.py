@@ -7,7 +7,7 @@ import base64
 
 import requests
 
-#This module is based on PHP SDK for maib ecommerce API https://github.com/maib-ecomm/maib-sdk-php
+# Based on PHP SDK for maib ecommerce API https://github.com/maib-ecomm/maib-sdk-php (https://packagist.org/packages/maib-ecomm/maib-sdk-php)
 
 class MaibSdk:
     # maib ecommerce API base url
@@ -57,8 +57,8 @@ class MaibSdk:
         """Send a request and parse the response."""
 
         auth = BearerAuth(token) if token else None
-
         url = self.__build_url(url=url, entity_id=entity_id)
+
         logging.debug('MaibSdk Request', extra={'method': method, 'url': url, 'data': data})
         with requests.request(method=method, url=url, json=data, auth=auth, timeout=MaibSdk.DEFAULT_TIMEOUT) as response:
             response_json = response.json()
@@ -113,7 +113,6 @@ class MaibSdk:
         if response:
             response_obj = json.loads(response)
 
-            #https://stackoverflow.com/questions/363944/python-idiom-to-return-first-item-or-none
             response_error = next(iter(response_obj.get('errors', [])), None)
             if response_error:
                 error_message = response_error.get('errorMessage')
