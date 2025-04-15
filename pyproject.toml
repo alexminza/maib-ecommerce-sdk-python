@@ -1,13 +1,13 @@
 [project]
 name = "maib-ecommerce-sdk"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
   { name="Alexander Minza" },
 ]
 description = "Python SDK for maib ecommerce API"
 readme = "README.md"
 requires-python = ">=3.9"
-keywords = ["maib", "ecommerce", "payments", "api", "sdk", "python"]
+keywords = ["maib", "moldova", "ecommerce", "payments", "api", "sdk", "python"]
 classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
