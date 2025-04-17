@@ -81,7 +81,7 @@ class MaibSdk:
         response_errors = response.get('errors')
         if response_errors is not None:
             error = response_errors[0]
-            raise MaibPaymentException(f'Error sending request to endpoint $endpoint: {error.get('errorMessage')} ({error.get('errorCode')})')
+            raise MaibPaymentException(f'Error sending request to endpoint {endpoint}: {error.get('errorMessage')} ({error.get('errorCode')})')
 
         raise MaibPaymentException(f'Invalid response received from server for endpoint {endpoint}: missing \'ok\' and \'errors\' fields')
 

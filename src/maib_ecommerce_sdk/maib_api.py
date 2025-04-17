@@ -68,7 +68,7 @@ class MaibApi:
     def __execute_pay_operation(self, endpoint: str, data: dict, token: str, required_params: list, method: str = 'POST'):
         try:
             self.__validate_pay_params(data=data, required_params=required_params)
-            self.validate_access_token(token=token)
+            self.__validate_access_token(token=token)
             return self.__send_request(method=method, endpoint=endpoint, data=data, token=token)
         except MaibPaymentException as ex:
             logging.exception('MaibApi.execute_pay_operation')
@@ -77,7 +77,7 @@ class MaibApi:
     def __execute_entity_id_operation(self, endpoint: str, entity_id: str, token: str, method: str = 'GET'):
         try:
             self.__validate_id_param(entity_id=entity_id)
-            self.validate_access_token(token=token)
+            self.__validate_access_token(token=token)
             return self.__send_request(method=method, endpoint=endpoint, token=token, entity_id=entity_id)
         except MaibPaymentException as ex:
             logging.exception('MaibApi.execute_entity_id_operation')
@@ -93,13 +93,15 @@ class MaibApi:
 
         return self.__client.handle_response(response, endpoint)
 
-    def validate_access_token(self, token: str):
+    @staticmethod
+    def __validate_access_token(token: str):
         """Validates the access token."""
 
         if not token or len(token) == 0:
             raise MaibPaymentException('Access token is not valid. It should be a non-empty string.')
 
-    def __validate_id_param(self, entity_id: str):
+    @staticmethod
+    def __validate_id_param(entity_id: str):
         """Validates the ID parameter."""
 
         if not entity_id:
@@ -108,7 +110,8 @@ class MaibApi:
         if len(entity_id) == 0:
             raise MaibPaymentException('Invalid ID parameter. Should be string of 36 characters.')
 
-    def __validate_pay_params(self, data: dict, required_params: list):
+    @staticmethod
+    def __validate_pay_params(data: dict, required_params: list):
         """Validates the parameters."""
 
         # Check that all required parameters are present
