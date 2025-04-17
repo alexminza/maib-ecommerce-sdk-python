@@ -1,7 +1,7 @@
 """Python SDK for maib ecommerce API"""
 
 import logging
-from .maibsdk import MaibSdk, MaibTokenException
+from .maib_sdk import MaibSdk, MaibTokenException
 
 class MaibAuthRequest:
     """Factory class responsible for creating new instances of the MaibAuth class."""
