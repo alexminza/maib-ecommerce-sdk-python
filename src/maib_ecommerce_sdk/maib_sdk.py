@@ -91,12 +91,15 @@ class MaibSdk:
         #https://docs.maibmerchants.md/en/notifications-on-callback-url
         #https://github.com/maib-ecomm/maib-sdk-php/blob/main/examples/callbackUrl.php
 
+        if not signature_key:
+            raise MaibPaymentException('Invalid signature key')
+
         callback_signature = callback_data.get('signature')
         if not callback_signature:
             raise MaibPaymentException('Missing callback signature')
 
         callback_result = callback_data['result']
-        sorted_callback_result = {key: str(value) for key, value in sorted(callback_result.items())}
+        sorted_callback_result = {key: (str(value) if value is not None else '') for key, value in sorted(callback_result.items())}
         sorted_callback_values = list(sorted_callback_result.values())
         sorted_callback_values.append(signature_key)
 
