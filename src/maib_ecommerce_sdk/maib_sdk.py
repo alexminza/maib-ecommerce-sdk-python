@@ -94,10 +94,7 @@ class MaibSdk:
         if not signature_key:
             raise MaibPaymentException('Invalid signature key')
 
-        callback_signature = callback_data.get('signature')
-        if not callback_signature:
-            raise MaibPaymentException('Missing callback signature')
-
+        callback_signature = callback_data['signature']
         callback_result = callback_data['result']
         sorted_callback_result = {key: (str(value) if value is not None else '') for key, value in sorted(callback_result.items())}
         sorted_callback_values = list(sorted_callback_result.values())
