@@ -61,7 +61,7 @@ class MaibSdk:
 
         logging.debug('MaibSdk Request', extra={'method': method, 'url': url, 'data': data})
         with requests.request(method=method, url=url, json=data, auth=auth, timeout=MaibSdk.DEFAULT_TIMEOUT) as response:
-            response_json = response.json()
+            response_json: dict = response.json()
             logging.debug('MaibSdk Response', extra={'response_json': response_json})
             #response.raise_for_status()
             return response_json
@@ -72,7 +72,7 @@ class MaibSdk:
 
         response_ok = response.get('ok')
         if response_ok is not None and response_ok is True:
-            response_result = response.get('result')
+            response_result: dict = response.get('result')
             if response_result is not None:
                 return response_result
 
