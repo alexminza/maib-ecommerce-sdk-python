@@ -9,6 +9,8 @@ import requests
 
 # Based on PHP SDK for maib ecommerce API https://github.com/maib-ecomm/maib-sdk-php (https://packagist.org/packages/maib-ecomm/maib-sdk-php)
 
+logger = logging.getLogger(__name__)
+
 class MaibSdk:
     # maib ecommerce API base url
     DEFAULT_BASE_URL = 'https://api.maibmerchants.md/v1/'
@@ -59,10 +61,10 @@ class MaibSdk:
         auth = BearerAuth(token) if token else None
         url = self.__build_url(url=url, entity_id=entity_id)
 
-        logging.debug('MaibSdk Request', extra={'method': method, 'url': url, 'data': data})
+        logger.debug('MaibSdk Request', extra={'method': method, 'url': url, 'data': data, 'token': token})
         with requests.request(method=method, url=url, json=data, auth=auth, timeout=MaibSdk.DEFAULT_TIMEOUT) as response:
-            response_json = response.json()
-            logging.debug('MaibSdk Response', extra={'response_json': response_json})
+            response_json: dict = response.json() if response.ok else None
+            logger.debug('MaibSdk Response', extra={'response_json': response_json, 'response_text': response.text, 'status_code': response.status_code})
             #response.raise_for_status()
             return response_json
 
@@ -72,7 +74,7 @@ class MaibSdk:
 
         response_ok = response.get('ok')
         if response_ok is not None and response_ok is True:
-            response_result = response.get('result')
+            response_result: dict = response.get('result')
             if response_result is not None:
                 return response_result
 
