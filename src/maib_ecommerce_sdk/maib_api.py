@@ -16,7 +16,7 @@ class MaibApiRequest:
         return MaibApi(client)
 
 class MaibApi:
-    __client: MaibSdk = None
+    _client: MaibSdk = None
 
     REQUIRED_PAY_PARAMS = ['amount', 'currency', 'clientIp']
     REQUIRED_PAYID_PARAMS = ['payId']
@@ -25,85 +25,85 @@ class MaibApi:
     REQUIRED_EXECUTE_ONECLICK_PARAMS = ['billerId', 'amount', 'currency', 'clientIp']
 
     def __init__(self, client: MaibSdk):
-        self.__client = client
+        self._client = client
 
     def pay(self, data: dict, token: str):
         """Sends a request to the pay endpoint."""
-        return self.__execute_pay_operation(endpoint=MaibSdk.DIRECT_PAY, data=data, token=token, required_params=MaibApi.REQUIRED_PAY_PARAMS)
+        return self._execute_pay_operation(endpoint=MaibSdk.DIRECT_PAY, data=data, token=token, required_params=MaibApi.REQUIRED_PAY_PARAMS)
 
     def hold(self, data: dict, token: str):
         """Sends a request to the hold endpoint."""
-        return self.__execute_pay_operation(endpoint=MaibSdk.HOLD, data=data, token=token, required_params=MaibApi.REQUIRED_PAY_PARAMS)
+        return self._execute_pay_operation(endpoint=MaibSdk.HOLD, data=data, token=token, required_params=MaibApi.REQUIRED_PAY_PARAMS)
 
     def complete(self, data: dict, token: str):
         """Sends a request to the complete endpoint."""
-        return self.__execute_pay_operation(endpoint=MaibSdk.COMPLETE, data=data, token=token, required_params=MaibApi.REQUIRED_PAYID_PARAMS)
+        return self._execute_pay_operation(endpoint=MaibSdk.COMPLETE, data=data, token=token, required_params=MaibApi.REQUIRED_PAYID_PARAMS)
 
     def refund(self, data: dict, token: str):
         """Sends a request to the refund endpoint."""
-        return self.__execute_pay_operation(endpoint=MaibSdk.REFUND, data=data, token=token, required_params=MaibApi.REQUIRED_PAYID_PARAMS)
+        return self._execute_pay_operation(endpoint=MaibSdk.REFUND, data=data, token=token, required_params=MaibApi.REQUIRED_PAYID_PARAMS)
 
     def pay_info(self, pay_id: str, token: str):
         """Sends a request to the pay-info endpoint."""
-        return self.__execute_entity_id_operation(endpoint=MaibSdk.PAY_INFO, entity_id=pay_id, token=token)
+        return self._execute_entity_id_operation(endpoint=MaibSdk.PAY_INFO, entity_id=pay_id, token=token)
 
     def delete_card(self, entity_id: str, token: str):
         """Sends a request to the delete-card endpoint."""
-        return self.__execute_entity_id_operation(method='DELETE', endpoint=MaibSdk.DELETE_CARD, entity_id=entity_id, token=token)
+        return self._execute_entity_id_operation(method='DELETE', endpoint=MaibSdk.DELETE_CARD, entity_id=entity_id, token=token)
 
     def save_recurring(self, data: dict, token: str):
         """Sends a request to the savecard-recurring endpoint."""
-        return self.__execute_pay_operation(endpoint=MaibSdk.SAVE_REC, data=data, token=token, required_params=MaibApi.REQUIRED_SAVE_PARAMS)
+        return self._execute_pay_operation(endpoint=MaibSdk.SAVE_REC, data=data, token=token, required_params=MaibApi.REQUIRED_SAVE_PARAMS)
 
     def execute_recurring(self, data: dict, token: str):
         """Sends a request to the execute-recurring endpoint."""
-        return self.__execute_pay_operation(endpoint=MaibSdk.EXE_REC, data=data, token=token, required_params=MaibApi.REQUIRED_EXECUTE_RECURRING_PARAMS)
+        return self._execute_pay_operation(endpoint=MaibSdk.EXE_REC, data=data, token=token, required_params=MaibApi.REQUIRED_EXECUTE_RECURRING_PARAMS)
 
     def save_oneclick(self, data: dict, token: str):
         """Sends a request to the savecard-oneclick endpoint."""
-        return self.__execute_pay_operation(endpoint=MaibSdk.SAVE_ONECLICK, data=data, token=token, required_params=MaibApi.REQUIRED_SAVE_PARAMS)
+        return self._execute_pay_operation(endpoint=MaibSdk.SAVE_ONECLICK, data=data, token=token, required_params=MaibApi.REQUIRED_SAVE_PARAMS)
 
     def execute_oneclick(self, data: dict, token: str):
         """Sends a request to the execute-oneclick endpoint."""
-        return self.__execute_pay_operation(endpoint=MaibSdk.EXE_ONECLICK, data=data, token=token, required_params=MaibApi.REQUIRED_EXECUTE_ONECLICK_PARAMS)
+        return self._execute_pay_operation(endpoint=MaibSdk.EXE_ONECLICK, data=data, token=token, required_params=MaibApi.REQUIRED_EXECUTE_ONECLICK_PARAMS)
 
-    def __execute_pay_operation(self, endpoint: str, data: dict, token: str, required_params: list, method: str = 'POST'):
+    def _execute_pay_operation(self, endpoint: str, data: dict, token: str, required_params: list, method: str = 'POST'):
         try:
-            self.__validate_pay_params(data=data, required_params=required_params)
-            self.__validate_access_token(token=token)
-            return self.__send_request(method=method, endpoint=endpoint, data=data, token=token)
+            self._validate_pay_params(data=data, required_params=required_params)
+            self._validate_access_token(token=token)
+            return self._send_request(method=method, endpoint=endpoint, data=data, token=token)
         except MaibPaymentException as ex:
             logger.exception('MaibApi.execute_pay_operation')
             raise MaibPaymentException(f'Invalid request: {ex}') from ex
 
-    def __execute_entity_id_operation(self, endpoint: str, entity_id: str, token: str, method: str = 'GET'):
+    def _execute_entity_id_operation(self, endpoint: str, entity_id: str, token: str, method: str = 'GET'):
         try:
-            self.__validate_id_param(entity_id=entity_id)
-            self.__validate_access_token(token=token)
-            return self.__send_request(method=method, endpoint=endpoint, token=token, entity_id=entity_id)
+            self._validate_id_param(entity_id=entity_id)
+            self._validate_access_token(token=token)
+            return self._send_request(method=method, endpoint=endpoint, token=token, entity_id=entity_id)
         except MaibPaymentException as ex:
             logger.exception('MaibApi.execute_entity_id_operation')
             raise MaibPaymentException(f'Invalid request: {ex}') from ex
 
-    def __send_request(self, method: str, endpoint: str, token: str, data: dict = None, entity_id: str = None):
+    def _send_request(self, method: str, endpoint: str, token: str, data: dict = None, entity_id: str = None):
         """Sends a request to the specified endpoint."""
 
         try:
-            response = self.__client.send_request(method=method, url=endpoint, data=data, token=token, entity_id=entity_id)
+            response = self._client.send_request(method=method, url=endpoint, data=data, token=token, entity_id=entity_id)
         except Exception as ex:
             raise MaibPaymentException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
 
-        return self.__client.handle_response(response, endpoint)
+        return self._client.handle_response(response, endpoint)
 
     @staticmethod
-    def __validate_access_token(token: str):
+    def _validate_access_token(token: str):
         """Validates the access token."""
 
         if not token or len(token) == 0:
             raise MaibPaymentException('Access token is not valid. It should be a non-empty string.')
 
     @staticmethod
-    def __validate_id_param(entity_id: str):
+    def _validate_id_param(entity_id: str):
         """Validates the ID parameter."""
 
         if not entity_id:
@@ -113,7 +113,7 @@ class MaibApi:
             raise MaibPaymentException('Invalid ID parameter. Should be string of 36 characters.')
 
     @staticmethod
-    def __validate_pay_params(data: dict, required_params: list):
+    def _validate_pay_params(data: dict, required_params: list):
         """Validates the parameters."""
 
         # Check that all required parameters are present

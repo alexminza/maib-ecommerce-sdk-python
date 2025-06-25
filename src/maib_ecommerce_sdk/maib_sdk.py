@@ -31,25 +31,25 @@ class MaibSdk:
 
     DEFAULT_TIMEOUT = 30
 
-    __instance = None
-    __base_url: str = None
+    _instance = None
+    _base_url: str = None
 
     def __init__(self):
-        self.__base_url = MaibSdk.DEFAULT_BASE_URL
+        self._base_url = MaibSdk.DEFAULT_BASE_URL
 
     @staticmethod
     def get_instance():
         """Get the instance of MaibSdk (Singleton pattern)"""
 
-        if MaibSdk.__instance is None:
-            MaibSdk.__instance = MaibSdk()
+        if MaibSdk._instance is None:
+            MaibSdk._instance = MaibSdk()
 
-        return MaibSdk.__instance
+        return MaibSdk._instance
 
-    def __build_url(self, url: str, entity_id: str = None):
+    def _build_url(self, url: str, entity_id: str = None):
         """Build the complete URL for the request"""
 
-        url = self.__base_url + url
+        url = self._base_url + url
 
         if entity_id:
             url = f'{url}/{entity_id}'
@@ -60,7 +60,7 @@ class MaibSdk:
         """Send a request and parse the response."""
 
         auth = BearerAuth(token) if token else None
-        url = self.__build_url(url=url, entity_id=entity_id)
+        url = self._build_url(url=url, entity_id=entity_id)
 
         logger.debug('MaibSdk Request', extra={'method': method, 'url': url, 'data': data, 'token': token})
         with requests.request(method=method, url=url, json=data, auth=auth, timeout=MaibSdk.DEFAULT_TIMEOUT) as response:
