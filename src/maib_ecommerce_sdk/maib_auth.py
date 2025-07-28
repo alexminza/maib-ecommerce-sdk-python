@@ -35,10 +35,12 @@ class MaibAuth:
             post_data['refreshToken'] = project_id
 
         try:
-            response = self._client.send_request('POST', MaibSdk.GET_TOKEN, post_data)
+            method = 'POST'
+            endpoint = MaibSdk.GET_TOKEN
+            response = self._client.send_request(method=method, url=endpoint, data=post_data)
         except Exception as ex:
             logger.exception('MaibAuth.generate_token')
-            raise MaibTokenException(f'HTTP error while sending POST request to endpoint {MaibSdk.GET_TOKEN}') from ex
+            raise MaibTokenException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
 
         result = self._client.handle_response(response, MaibSdk.GET_TOKEN)
         return result
