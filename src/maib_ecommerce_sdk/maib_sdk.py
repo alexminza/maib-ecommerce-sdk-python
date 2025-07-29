@@ -101,8 +101,8 @@ class MaibSdk:
         if not signature_key:
             raise MaibPaymentException('Invalid signature key')
 
-        callback_signature = callback_data.get('signature')
-        callback_result = callback_data.get('result')
+        callback_signature: str = callback_data.get('signature')
+        callback_result: dict[str, any] = callback_data.get('result')
 
         if not callback_signature or not callback_result:
             raise MaibPaymentException('Missing result or signature in callback data.')
