@@ -9,6 +9,7 @@ import base64
 import requests
 
 # Based on PHP SDK for maib ecommerce API https://github.com/maib-ecomm/maib-sdk-php (https://packagist.org/packages/maib-ecomm/maib-sdk-php)
+# maib e-commerce API https://docs.maibmerchants.md
 
 logger = logging.getLogger(__name__)
 
@@ -95,8 +96,8 @@ class MaibSdk:
     @staticmethod
     def validate_callback_signature(callback_data: dict, signature_key: str):
         """Validates the callback data signature."""
-        #https://docs.maibmerchants.md/en/notifications-on-callback-url
-        #https://github.com/maib-ecomm/maib-sdk-php/blob/main/examples/callbackUrl.php
+        # https://docs.maibmerchants.md/en/notifications-on-callback-url
+        # https://github.com/maib-ecomm/maib-sdk-php/blob/main/examples/callbackUrl.php
 
         if not signature_key:
             raise MaibPaymentException('Invalid signature key')
@@ -135,7 +136,7 @@ class MaibSdk:
 #region Requests
 class BearerAuth(requests.auth.AuthBase):
     """Attaches HTTP Bearer Token Authentication to the given Request object."""
-    #https://requests.readthedocs.io/en/latest/user/authentication/#new-forms-of-authentication
+    # https://requests.readthedocs.io/en/latest/user/authentication/#new-forms-of-authentication
 
     token: str = None
 
