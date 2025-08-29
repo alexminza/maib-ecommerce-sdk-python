@@ -1,17 +1,17 @@
 """Python SDK for maib ecommerce API"""
 
 import json
-import logging
 import hashlib
 import hmac
 import base64
 
 import requests
 
+from . import logger
+
+
 # Based on PHP SDK for maib ecommerce API https://github.com/maib-ecomm/maib-sdk-php (https://packagist.org/packages/maib-ecomm/maib-sdk-php)
 # maib e-commerce API https://docs.maibmerchants.md
-
-logger = logging.getLogger(__name__)
 
 class MaibSdk:
     # maib ecommerce API base url
