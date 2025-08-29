@@ -1,8 +1,11 @@
 # Python SDK for maib ecommerce API
-maib e-commerce API docs: [https://docs.maibmerchants.md](https://docs.maibmerchants.md)
+* maib e-commerce API docs: https://docs.maibmerchants.md
+* GitHub project https://github.com/alexminza/maib-ecommerce-sdk-python
+* PyPI package https://pypi.org/project/maib-ecommerce-sdk/
 
 ## Installation
-To easily install or upgrade to the latest release, use `pip`.
+To easily install or upgrade to the latest release, use `pip`:
+
 ```shell
 pip install --upgrade maib-ecommerce-sdk
 ```

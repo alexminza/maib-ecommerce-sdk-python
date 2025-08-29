@@ -1,21 +1,19 @@
 [project]
 name = "maib-ecommerce-sdk"
-version = "1.0.7"
-authors = [
-  { name="Alexander Minza" },
-]
+version = "1.0.8"
+authors = [{ name = "Alexander Minza" }]
 description = "Python SDK for maib ecommerce API"
 readme = "README.md"
 requires-python = ">=3.9"
+dependencies = ["requests"]
 keywords = ["maib", "moldova", "ecommerce", "payments", "api", "sdk", "python"]
 classifiers = [
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Topic :: Software Development :: Libraries :: Python Modules"
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-license.text = "GPL-3.0-or-later"
+license = "GPL-3.0-or-later"
 
 [project.urls]
 Homepage = "https://github.com/alexminza/maib-ecommerce-sdk-python"

@@ -1,9 +1,7 @@
 """Python SDK for maib ecommerce API"""
 
-import logging
 from .maib_sdk import MaibSdk, MaibTokenException
 
-logger = logging.getLogger(__name__)
 
 class MaibAuthRequest:
     """Factory class responsible for creating new instances of the MaibAuth class."""
@@ -16,10 +14,10 @@ class MaibAuthRequest:
         return MaibAuth(client)
 
 class MaibAuth:
-    __client: MaibSdk = None
+    _client: MaibSdk = None
 
     def __init__(self, client: MaibSdk):
-        self.__client = client
+        self._client = client
 
     def generate_token(self, project_id: str = None, project_secret: str = None):
         """Generates a new access token using the given project ID and secret or refresh token."""
@@ -35,10 +33,11 @@ class MaibAuth:
             post_data['refreshToken'] = project_id
 
         try:
-            response = self.__client.send_request('POST', MaibSdk.GET_TOKEN, post_data)
+            method = 'POST'
+            endpoint = MaibSdk.GET_TOKEN
+            response = self._client.send_request(method=method, url=endpoint, data=post_data)
         except Exception as ex:
-            logger.exception('MaibAuth.generate_token')
-            raise MaibTokenException(f'HTTP error while sending POST request to endpoint {MaibSdk.GET_TOKEN}') from ex
+            raise MaibTokenException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
 
-        result = self.__client.handle_response(response, MaibSdk.GET_TOKEN)
+        result = self._client.handle_response(response, MaibSdk.GET_TOKEN)
         return result
