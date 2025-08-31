@@ -5,7 +5,7 @@ import hashlib
 import hmac
 import base64
 
-import requests
+import httpx
 
 from . import logger
 
@@ -34,8 +34,8 @@ class MaibSdk:
 
     _base_url: str = None
 
-    def __init__(self):
-        self._base_url = MaibSdk.DEFAULT_BASE_URL
+    def __init__(self, base_url: str = DEFAULT_BASE_URL):
+        self._base_url = base_url
 
     def _build_url(self, url: str, entity_id: str = None):
         """Build the complete URL for the request"""
@@ -47,6 +47,15 @@ class MaibSdk:
 
         return url
 
+    def _process_response(self, response: httpx.Response):
+        if not response.ok:
+            logger.error('%s Error: %d %s', self.__qualname__, response.status_code, response.text, extra={'method': response.request.method, 'url': response.request.url, 'response_text': response.text, 'status_code': response.status_code})
+            #response.raise_for_status()
+
+        response_json: dict = response.json()
+        logger.debug('%s Response: %d', self.__qualname__, response.status_code, extra={'response_json': response_json})
+        return response_json
+
     def send_request(self, method: str, url: str, data: dict = None, token: str = None, entity_id: str = None):
         """Send a request and parse the response."""
 
@@ -54,14 +63,20 @@ class MaibSdk:
         url = self._build_url(url=url, entity_id=entity_id)
 
         logger.debug('%s Request: %s %s', self.__qualname__, method, url, extra={'method': method, 'url': url, 'data': data, 'token': token})
-        with requests.request(method=method, url=url, json=data, auth=auth, timeout=MaibSdk.DEFAULT_TIMEOUT) as response:
-            if not response.ok:
-                logger.error('%s Error: %d %s', self.__qualname__, response.status_code, response.text, extra={'method': method, 'url': url, 'response_text': response.text, 'status_code': response.status_code})
-                #response.raise_for_status()
+        with httpx.Client() as client:
+            response = client.request(method=method, url=url, json=data, auth=auth, timeout=self.DEFAULT_TIMEOUT)
+            return self._process_response(response=response)
 
-            response_json: dict = response.json()
-            logger.debug('%s Response: %d', self.__qualname__, response.status_code, extra={'response_json': response_json})
-            return response_json
+    async def send_request_async(self, method: str, url: str, data: dict = None, token: str = None, entity_id: str = None):
+        """Send async request and parse the response."""
+
+        auth = BearerAuth(token) if token else None
+        url = self._build_url(url=url, entity_id=entity_id)
+
+        logger.debug('%s Request: %s %s', self.__qualname__, method, url, extra={'method': method, 'url': url, 'data': data, 'token': token})
+        async with httpx.AsyncClient() as client:
+            response = await client.request(method=method, url=url, json=data, auth=auth, timeout=self.DEFAULT_TIMEOUT)
+            return self._process_response(response=response)
 
     @staticmethod
     def handle_response(response: dict, endpoint: str):
@@ -124,19 +139,19 @@ class MaibSdk:
 
         return error_message
 
-#region Requests
-class BearerAuth(requests.auth.AuthBase):
+#region Auth
+class BearerAuth(httpx.Auth):
     """Attaches HTTP Bearer Token Authentication to the given Request object."""
-    # https://requests.readthedocs.io/en/latest/user/authentication/#new-forms-of-authentication
+    # https://www.python-httpx.org/advanced/authentication/#custom-authentication-schemes
 
     token: str = None
 
     def __init__(self, token: str):
         self.token = token
 
-    def __call__(self, request: requests.PreparedRequest):
-        request.headers["Authorization"] = f'Bearer {self.token}'
-        return request
+    def auth_flow(self, request: httpx.Request):
+        request.headers['Authorization'] = f'Bearer {self.token}'
+        yield request
 #endregion
 
 #region Exceptions
