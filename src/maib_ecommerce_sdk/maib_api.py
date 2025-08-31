@@ -288,7 +288,6 @@ class MaibApi:
 
         client_ip = data.get('clientIp')
         if client_ip is not None:
-            #TODO: Validate IP address
             if not isinstance(client_ip, str):
                 raise MaibPaymentException('Invalid \'clientIp\' parameter. Please provide a valid IP address.')
 
@@ -309,7 +308,6 @@ class MaibApi:
 
         email = data.get('email')
         if email is not None:
-            #TODO: Validate email address
             if not isinstance(email, str):
                 raise MaibPaymentException('Invalid \'email\' parameter. Please provide a valid email address.')
 
@@ -356,19 +354,16 @@ class MaibApi:
 
         callback_url = data.get('callbackUrl')
         if callback_url is not None:
-            #TODO: Validate URL
             if not isinstance(callback_url, str):
                 raise MaibPaymentException('Invalid \'callbackUrl\' parameter. Should be a string url.')
 
         ok_url = data.get('okUrl')
         if ok_url is not None:
-            #TODO: Validate URL
             if not isinstance(ok_url, str):
                 raise MaibPaymentException('Invalid \'ok_url\' parameter. Should be a string url.')
 
         fail_url = data.get('failUrl')
         if fail_url is not None:
-            #TODO: Validate URL
             if not isinstance(fail_url, str):
                 raise MaibPaymentException('Invalid \'fail_url\' parameter. Should be a string url.')
 
