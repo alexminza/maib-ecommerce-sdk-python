@@ -32,20 +32,10 @@ class MaibSdk:
 
     DEFAULT_TIMEOUT = 30
 
-    _instance = None
     _base_url: str = None
 
     def __init__(self):
         self._base_url = MaibSdk.DEFAULT_BASE_URL
-
-    @staticmethod
-    def get_instance():
-        """Get the instance of MaibSdk (Singleton pattern)"""
-
-        if MaibSdk._instance is None:
-            MaibSdk._instance = MaibSdk()
-
-        return MaibSdk._instance
 
     def _build_url(self, url: str, entity_id: str = None):
         """Build the complete URL for the request"""
