@@ -180,7 +180,7 @@ class MaibApi:
     #endregion
 
     #region Sync operation
-    def _execute_pay_operation(self, endpoint: str, data: dict, token: str, required_params: list, method: str = 'POST'):
+    def _execute_pay_operation(self, endpoint: str, data: dict, token: str, required_params: list[str], method: str = 'POST'):
         self._validate_pay_params(data=data, required_params=required_params)
         self._validate_access_token(token=token)
         return self._send_request(method=method, endpoint=endpoint, data=data, token=token)
@@ -202,7 +202,7 @@ class MaibApi:
     #endregion
 
     #region Async operation
-    async def _execute_pay_operation_async(self, endpoint: str, data: dict, token: str, required_params: list, method: str = 'POST'):
+    async def _execute_pay_operation_async(self, endpoint: str, data: dict, token: str, required_params: list[str], method: str = 'POST'):
         self._validate_pay_params(data=data, required_params=required_params)
         self._validate_access_token(token=token)
         return await self._send_request_async(method=method, endpoint=endpoint, data=data, token=token)
@@ -242,7 +242,7 @@ class MaibApi:
             raise MaibPaymentException('Invalid ID parameter. Should be string of 36 characters.')
 
     @staticmethod
-    def _validate_pay_params(data: dict, required_params: list):
+    def _validate_pay_params(data: dict, required_params: list[str]):
         """Validates the parameters."""
 
         # Check that all required parameters are present

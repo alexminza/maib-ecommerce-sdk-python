@@ -1,5 +1,6 @@
 """Python SDK for maib ecommerce API"""
 
+import logging
 import json
 import hashlib
 import hmac
@@ -7,7 +8,7 @@ import base64
 
 import httpx
 
-from . import logger
+logger = logging.getLogger(__name__)
 
 
 # Based on PHP SDK for maib ecommerce API https://github.com/maib-ecomm/maib-sdk-php (https://packagist.org/packages/maib-ecomm/maib-sdk-php)
@@ -48,7 +49,7 @@ class MaibSdk:
         return url
 
     def _process_response(self, response: httpx.Response):
-        if not response.ok:
+        if response.is_error:
             logger.error('%s Error: %d %s', self.__qualname__, response.status_code, response.text, extra={'method': response.request.method, 'url': response.request.url, 'response_text': response.text, 'status_code': response.status_code})
             #response.raise_for_status()
 
