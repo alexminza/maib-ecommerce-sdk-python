@@ -1,6 +1,10 @@
 """Python SDK for maib ecommerce API"""
 
+import logging
+
 from .maib_sdk import MaibSdk, MaibPaymentException
+
+logger = logging.getLogger(__name__)
 
 
 class MaibApiRequest:
@@ -196,6 +200,7 @@ class MaibApi:
         try:
             response = self._client.send_request(method=method, url=endpoint, data=data, token=token, entity_id=entity_id)
         except Exception as ex:
+            logger.exception(MaibApi.__qualname__)
             raise MaibPaymentException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
 
         return self._client.handle_response(response, endpoint)
@@ -218,6 +223,7 @@ class MaibApi:
         try:
             response = await self._client.send_request_async(method=method, url=endpoint, data=data, token=token, entity_id=entity_id)
         except Exception as ex:
+            logger.exception(MaibApi.__qualname__)
             raise MaibPaymentException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
 
         return self._client.handle_response(response, endpoint)
