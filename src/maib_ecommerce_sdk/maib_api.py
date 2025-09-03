@@ -200,7 +200,7 @@ class MaibApi:
         try:
             response = self._client.send_request(method=method, url=endpoint, data=data, token=token, entity_id=entity_id)
         except Exception as ex:
-            logger.exception(MaibApi.__qualname__)
+            logger.exception(self.__class__.__qualname__)
             raise MaibPaymentException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
 
         return self._client.handle_response(response, endpoint)
@@ -223,7 +223,7 @@ class MaibApi:
         try:
             response = await self._client.send_request_async(method=method, url=endpoint, data=data, token=token, entity_id=entity_id)
         except Exception as ex:
-            logger.exception(MaibApi.__qualname__)
+            logger.exception(self.__class__.__qualname__)
             raise MaibPaymentException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
 
         return self._client.handle_response(response, endpoint)
