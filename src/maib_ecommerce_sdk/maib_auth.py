@@ -38,7 +38,7 @@ class MaibAuth:
             endpoint = MaibSdk.GET_TOKEN
             response = self._client.send_request(method=method, url=endpoint, data=generate_token_data)
         except Exception as ex:
-            logger.exception(MaibAuth.__qualname__)
+            logger.exception(self.__class__.__qualname__)
             raise MaibTokenException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
 
         result = self._client.handle_response(response, MaibSdk.GET_TOKEN)
@@ -58,7 +58,7 @@ class MaibAuth:
             endpoint = MaibSdk.GET_TOKEN
             response = await self._client.send_request_async(method=method, url=endpoint, data=generate_token_data)
         except Exception as ex:
-            logger.exception(MaibAuth.__qualname__)
+            logger.exception(self.__class__.__qualname__)
             raise MaibTokenException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
 
         result = self._client.handle_response(response, MaibSdk.GET_TOKEN)
