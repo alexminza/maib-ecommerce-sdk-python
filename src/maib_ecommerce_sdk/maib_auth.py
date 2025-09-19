@@ -18,6 +18,8 @@ class MaibAuthRequest:
         return MaibAuth(client)
 
 class MaibAuth:
+    """https://docs.maibmerchants.md/e-commerce/access-token-generation"""
+
     _client: MaibSdk = None
 
     def __init__(self, client: MaibSdk):
@@ -27,7 +29,7 @@ class MaibAuth:
     def generate_token(self, project_id: str = None, project_secret: str = None):
         """Generates a new access token using the given project ID and secret or refresh token.
 
-        https://docs.maibmerchants.md/en/access-token-generation"""
+        https://docs.maibmerchants.md/e-commerce/access-token-generation"""
 
         generate_token_data = self._build_generate_token_data(
             project_id=project_id,
@@ -47,7 +49,7 @@ class MaibAuth:
     async def generate_token_async(self, project_id: str = None, project_secret: str = None):
         """Generates a new access token using the given project ID and secret or refresh token.
 
-        https://docs.maibmerchants.md/en/access-token-generation"""
+        https://docs.maibmerchants.md/e-commerce/access-token-generation"""
 
         generate_token_data = self._build_generate_token_data(
             project_id=project_id,

@@ -15,6 +15,8 @@ logger = logging.getLogger(__name__)
 # maib e-commerce API https://docs.maibmerchants.md
 
 class MaibSdk:
+    """https://docs.maibmerchants.md/e-commerce"""
+
     # maib ecommerce API base url
     DEFAULT_BASE_URL = 'https://api.maibmerchants.md/v1/'
 
@@ -37,25 +39,6 @@ class MaibSdk:
 
     def __init__(self, base_url: str = DEFAULT_BASE_URL):
         self._base_url = base_url
-
-    def _build_url(self, url: str, entity_id: str = None):
-        """Build the complete URL for the request"""
-
-        url = self._base_url + url
-
-        if entity_id:
-            url = f'{url}/{entity_id}'
-
-        return url
-
-    def _process_response(self, response: httpx.Response):
-        if response.is_error:
-            logger.error(f'{self.__class__.__qualname__} Error: %d %s', response.status_code, response.text, extra={'method': response.request.method, 'url': response.request.url, 'response_text': response.text, 'status_code': response.status_code})
-            #response.raise_for_status()
-
-        response_json: dict = response.json()
-        logger.debug(f'{self.__class__.__qualname__} Response: %d %s %s', response.status_code, response.request.method, response.request.url, extra={'method': response.request.method, 'url': response.request.url, 'params': response.request.url.params, 'response_json': response_json, 'status_code': response.status_code})
-        return response_json
 
     def send_request(self, method: str, url: str, data: dict = None, token: str = None, entity_id: str = None):
         """Send a request and parse the response."""
@@ -139,6 +122,25 @@ class MaibSdk:
                 error_message = 'Unknown error details.'
 
         return error_message
+
+    def _build_url(self, url: str, entity_id: str = None):
+        """Build the complete URL for the request"""
+
+        url = self._base_url + url
+
+        if entity_id:
+            url = f'{url}/{entity_id}'
+
+        return url
+
+    def _process_response(self, response: httpx.Response):
+        if response.is_error:
+            logger.error(f'{self.__class__.__qualname__} Error: %d %s', response.status_code, response.text, extra={'method': response.request.method, 'url': response.request.url, 'response_text': response.text, 'status_code': response.status_code})
+            #response.raise_for_status()
+
+        response_json: dict = response.json()
+        logger.debug(f'{self.__class__.__qualname__} Response: %d %s %s', response.status_code, response.request.method, response.request.url, extra={'method': response.request.method, 'url': response.request.url, 'params': response.request.url.params, 'response_json': response_json, 'status_code': response.status_code})
+        return response_json
 
 #region Auth
 class BearerAuth(httpx.Auth):
