@@ -21,7 +21,7 @@ class MaibSdk:
     DEFAULT_BASE_URL = 'https://api.maibmerchants.md/v1/'
 
     # maib ecommerce API endpoints
-    GET_TOKEN = 'generate-token'
+    GENERATE_TOKEN = 'generate-token'
     DIRECT_PAY = 'pay'
     HOLD = 'hold'
     COMPLETE = 'complete'
