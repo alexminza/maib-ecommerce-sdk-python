@@ -1,6 +1,6 @@
 [project]
 name = "maib-ecommerce-sdk"
-version = "1.1.2"
+version = "1.1.3"
 authors = [{ name = "Alexander Minza" }]
 description = "Python SDK for maib ecommerce API"
 readme = "README.md"
@@ -19,4 +19,4 @@ license = "GPL-3.0-or-later"
 Homepage = "https://github.com/alexminza/maib-ecommerce-sdk-python"
 Issues = "https://github.com/alexminza/maib-ecommerce-sdk-python/issues"
 Repository = "https://github.com/alexminza/maib-ecommerce-sdk-python"
-Documentation = "https://docs.maibmerchants.md"
+Documentation = "https://docs.maibmerchants.md/e-commerce/"

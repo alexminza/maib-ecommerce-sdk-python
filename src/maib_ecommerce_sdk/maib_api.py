@@ -18,6 +18,8 @@ class MaibApiRequest:
         return MaibApi(client)
 
 class MaibApi:
+    """https://docs.maibmerchants.md/e-commerce/maib-e-commerce-api"""
+
     _client: MaibSdk = None
 
     REQUIRED_PAY_PARAMS = ['amount', 'currency', 'clientIp']
@@ -33,44 +35,46 @@ class MaibApi:
     def pay(self, data: dict, token: str):
         """Direct payment
 
-        https://docs.maibmerchants.md/en/direct-payment"""
+        https://docs.maibmerchants.md/e-commerce/direct-payment"""
 
         return self._execute_pay_operation(endpoint=MaibSdk.DIRECT_PAY, data=data, token=token, required_params=MaibApi.REQUIRED_PAY_PARAMS)
 
     async def pay_async(self, data: dict, token: str):
         """Direct payment
 
-        https://docs.maibmerchants.md/en/direct-payment"""
+        https://docs.maibmerchants.md/e-commerce/direct-payment"""
 
         return await self._execute_pay_operation_async(endpoint=MaibSdk.DIRECT_PAY, data=data, token=token, required_params=MaibApi.REQUIRED_PAY_PARAMS)
     #endregion
 
     #region Two-step payment
+    # https://docs.maibmerchants.md/e-commerce/two-step-payment
+
     def hold(self, data: dict, token: str):
         """Payment authorization
 
-        https://docs.maibmerchants.md/en/two-step-payment/payment-authorization"""
+        https://docs.maibmerchants.md/e-commerce/two-step-payment/payment-authorization"""
 
         return self._execute_pay_operation(endpoint=MaibSdk.HOLD, data=data, token=token, required_params=MaibApi.REQUIRED_PAY_PARAMS)
 
     async def hold_async(self, data: dict, token: str):
         """Payment authorization
 
-        https://docs.maibmerchants.md/en/two-step-payment/payment-authorization"""
+        https://docs.maibmerchants.md/e-commerce/two-step-payment/payment-authorization"""
 
         return await self._execute_pay_operation_async(endpoint=MaibSdk.HOLD, data=data, token=token, required_params=MaibApi.REQUIRED_PAY_PARAMS)
 
     def complete(self, data: dict, token: str):
         """Payment capture
 
-        https://docs.maibmerchants.md/en/two-step-payment/payment-capture"""
+        https://docs.maibmerchants.md/e-commerce/two-step-payment/payment-capture"""
 
         return self._execute_pay_operation(endpoint=MaibSdk.COMPLETE, data=data, token=token, required_params=MaibApi.REQUIRED_PAYID_PARAMS)
 
     async def complete_async(self, data: dict, token: str):
         """Payment capture
 
-        https://docs.maibmerchants.md/en/two-step-payment/payment-capture"""
+        https://docs.maibmerchants.md/e-commerce/two-step-payment/payment-capture"""
 
         return await self._execute_pay_operation_async(endpoint=MaibSdk.COMPLETE, data=data, token=token, required_params=MaibApi.REQUIRED_PAYID_PARAMS)
     #endregion
@@ -79,14 +83,14 @@ class MaibApi:
     def refund(self, data: dict, token: str):
         """Payment refund
 
-        https://docs.maibmerchants.md/en/payment-refund"""
+        https://docs.maibmerchants.md/e-commerce/payment-refund"""
 
         return self._execute_pay_operation(endpoint=MaibSdk.REFUND, data=data, token=token, required_params=MaibApi.REQUIRED_PAYID_PARAMS)
 
     async def refund_async(self, data: dict, token: str):
         """Payment refund
 
-        https://docs.maibmerchants.md/en/payment-refund"""
+        https://docs.maibmerchants.md/e-commerce/payment-refund"""
 
         return await self._execute_pay_operation_async(endpoint=MaibSdk.REFUND, data=data, token=token, required_params=MaibApi.REQUIRED_PAYID_PARAMS)
     #endregion
@@ -95,74 +99,78 @@ class MaibApi:
     def pay_info(self, pay_id: str, token: str):
         """Payment information
 
-        https://docs.maibmerchants.md/en/payment-information"""
+        https://docs.maibmerchants.md/e-commerce/payment-information"""
 
         return self._execute_entity_id_operation(endpoint=MaibSdk.PAY_INFO, entity_id=pay_id, token=token)
 
     async def pay_info_async(self, pay_id: str, token: str):
         """Payment information
 
-        https://docs.maibmerchants.md/en/payment-information"""
+        https://docs.maibmerchants.md/e-commerce/payment-information"""
 
         return await self._execute_entity_id_operation_async(endpoint=MaibSdk.PAY_INFO, entity_id=pay_id, token=token)
     #endregion
 
     #region Recurring payments
+    # https://docs.maibmerchants.md/e-commerce/recurring-payments
+
     def save_recurring(self, data: dict, token: str):
         """Register card in the maib ecomm system
 
-        https://docs.maibmerchants.md/en/recurring-payments/register-card-in-the-maib-ecomm-system"""
+        https://docs.maibmerchants.md/e-commerce/recurring-payments/register-card-in-the-maib-ecomm-system"""
 
         return self._execute_pay_operation(endpoint=MaibSdk.SAVE_REC, data=data, token=token, required_params=MaibApi.REQUIRED_SAVE_PARAMS)
 
     async def save_recurring_async(self, data: dict, token: str):
         """Register card in the maib ecomm system
 
-        https://docs.maibmerchants.md/en/recurring-payments/register-card-in-the-maib-ecomm-system"""
+        https://docs.maibmerchants.md/e-commerce/recurring-payments/register-card-in-the-maib-ecomm-system"""
 
         return await self._execute_pay_operation_async(endpoint=MaibSdk.SAVE_REC, data=data, token=token, required_params=MaibApi.REQUIRED_SAVE_PARAMS)
 
     def execute_recurring(self, data: dict, token: str):
         """Execute recurring payment
 
-        https://docs.maibmerchants.md/en/recurring-payments/execute-recurring-payment"""
+        https://docs.maibmerchants.md/e-commerce/recurring-payments/execute-recurring-payment"""
 
         return self._execute_pay_operation(endpoint=MaibSdk.EXE_REC, data=data, token=token, required_params=MaibApi.REQUIRED_EXECUTE_RECURRING_PARAMS)
 
     async def execute_recurring_async(self, data: dict, token: str):
         """Execute recurring payment
 
-        https://docs.maibmerchants.md/en/recurring-payments/execute-recurring-payment"""
+        https://docs.maibmerchants.md/e-commerce/recurring-payments/execute-recurring-payment"""
 
         return await self._execute_pay_operation_async(endpoint=MaibSdk.EXE_REC, data=data, token=token, required_params=MaibApi.REQUIRED_EXECUTE_RECURRING_PARAMS)
     #endregion
 
     #region One-click payments
+    # https://docs.maibmerchants.md/e-commerce/one-click-payments
+
     def save_oneclick(self, data: dict, token: str):
         """Register card in the maib ecomm system
 
-        https://docs.maibmerchants.md/en/one-click-payments/register-card-in-the-maib-ecomm-system"""
+        https://docs.maibmerchants.md/e-commerce/one-click-payments/register-card-in-the-maib-ecomm-system"""
 
         return self._execute_pay_operation(endpoint=MaibSdk.SAVE_ONECLICK, data=data, token=token, required_params=MaibApi.REQUIRED_SAVE_PARAMS)
 
     async def save_oneclick_async(self, data: dict, token: str):
         """Register card in the maib ecomm system
 
-        https://docs.maibmerchants.md/en/one-click-payments/register-card-in-the-maib-ecomm-system"""
+        https://docs.maibmerchants.md/e-commerce/one-click-payments/register-card-in-the-maib-ecomm-system"""
 
         return await self._execute_pay_operation_async(endpoint=MaibSdk.SAVE_ONECLICK, data=data, token=token, required_params=MaibApi.REQUIRED_SAVE_PARAMS)
 
     def execute_oneclick(self, data: dict, token: str):
         """Execute one-click payment
 
-        https://docs.maibmerchants.md/en/one-click-payments/execute-one-click-payment"""
+        https://docs.maibmerchants.md/e-commerce/one-click-payments/execute-one-click-payment"""
 
         return self._execute_pay_operation(endpoint=MaibSdk.EXE_ONECLICK, data=data, token=token, required_params=MaibApi.REQUIRED_EXECUTE_ONECLICK_PARAMS)
 
     async def execute_oneclick_async(self, data: dict, token: str):
         """Execute one-click payment
 
-        https://docs.maibmerchants.md/en/one-click-payments/execute-one-click-payment"""
+        https://docs.maibmerchants.md/e-commerce/one-click-payments/execute-one-click-payment"""
 
         return await self._execute_pay_operation_async(endpoint=MaibSdk.EXE_ONECLICK, data=data, token=token, required_params=MaibApi.REQUIRED_EXECUTE_ONECLICK_PARAMS)
     #endregion
@@ -171,14 +179,14 @@ class MaibApi:
     def delete_card(self, entity_id: str, token: str):
         """Deleting the card from maib ecomm
 
-        https://docs.maibmerchants.md/en/deleting-the-card-from-maib-ecomm"""
+        https://docs.maibmerchants.md/e-commerce/deleting-the-card-from-maib-ecomm"""
 
         return self._execute_entity_id_operation(method='DELETE', endpoint=MaibSdk.DELETE_CARD, entity_id=entity_id, token=token)
 
     async def delete_card_async(self, entity_id: str, token: str):
         """Deleting the card from maib ecomm
 
-        https://docs.maibmerchants.md/en/deleting-the-card-from-maib-ecomm"""
+        https://docs.maibmerchants.md/e-commerce/deleting-the-card-from-maib-ecomm"""
 
         return await self._execute_entity_id_operation_async(method='DELETE', endpoint=MaibSdk.DELETE_CARD, entity_id=entity_id, token=token)
     #endregion
@@ -200,7 +208,7 @@ class MaibApi:
         try:
             response = self._client.send_request(method=method, url=endpoint, data=data, token=token, entity_id=entity_id)
         except Exception as ex:
-            logger.exception(MaibApi.__qualname__)
+            logger.exception(self.__class__.__qualname__)
             raise MaibPaymentException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
 
         return self._client.handle_response(response, endpoint)
@@ -223,7 +231,7 @@ class MaibApi:
         try:
             response = await self._client.send_request_async(method=method, url=endpoint, data=data, token=token, entity_id=entity_id)
         except Exception as ex:
-            logger.exception(MaibApi.__qualname__)
+            logger.exception(self.__class__.__qualname__)
             raise MaibPaymentException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
 
         return self._client.handle_response(response, endpoint)

@@ -1,5 +1,5 @@
 # Python SDK for maib ecommerce API
-* maib e-commerce API docs: https://docs.maibmerchants.md
+* maib e-commerce API docs: https://docs.maibmerchants.md/e-commerce/
 * GitHub project https://github.com/alexminza/maib-ecommerce-sdk-python
 * PyPI package https://pypi.org/project/maib-ecommerce-sdk/
 

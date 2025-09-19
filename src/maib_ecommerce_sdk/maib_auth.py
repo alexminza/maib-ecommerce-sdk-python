@@ -18,63 +18,100 @@ class MaibAuthRequest:
         return MaibAuth(client)
 
 class MaibAuth:
+    """https://docs.maibmerchants.md/e-commerce/access-token-generation"""
+
     _client: MaibSdk = None
 
     def __init__(self, client: MaibSdk):
         self._client = client
 
     #region Generate token API
-    def generate_token(self, project_id: str = None, project_secret: str = None):
-        """Generates a new access token using the given project ID and secret or refresh token.
+    def generate_token(self, project_id: str, project_secret: str):
+        """Token generation using Project ID and Project Secret
 
-        https://docs.maibmerchants.md/en/access-token-generation"""
+        https://docs.maibmerchants.md/e-commerce/access-token-generation#token-generation-using-project-id-and-project-secret"""
 
-        generate_token_data = self._build_generate_token_data(
+        token_data = self._build_generate_token_data(
             project_id=project_id,
             project_secret=project_secret)
 
-        try:
-            method = 'POST'
-            endpoint = MaibSdk.GET_TOKEN
-            response = self._client.send_request(method=method, url=endpoint, data=generate_token_data)
-        except Exception as ex:
-            logger.exception(MaibAuth.__qualname__)
-            raise MaibTokenException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
+        return self._generate_token(data=token_data)
 
-        result = self._client.handle_response(response, MaibSdk.GET_TOKEN)
-        return result
+    async def generate_token_async(self, project_id: str, project_secret: str):
+        """Token generation using Project ID and Project Secret
 
-    async def generate_token_async(self, project_id: str = None, project_secret: str = None):
-        """Generates a new access token using the given project ID and secret or refresh token.
+        https://docs.maibmerchants.md/e-commerce/access-token-generation#token-generation-using-project-id-and-project-secret"""
 
-        https://docs.maibmerchants.md/en/access-token-generation"""
-
-        generate_token_data = self._build_generate_token_data(
+        token_data = self._build_generate_token_data(
             project_id=project_id,
             project_secret=project_secret)
 
-        try:
-            method = 'POST'
-            endpoint = MaibSdk.GET_TOKEN
-            response = await self._client.send_request_async(method=method, url=endpoint, data=generate_token_data)
-        except Exception as ex:
-            logger.exception(MaibAuth.__qualname__)
-            raise MaibTokenException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
-
-        result = self._client.handle_response(response, MaibSdk.GET_TOKEN)
-        return result
+        return await self._generate_token_async(data=token_data)
 
     @classmethod
     def _build_generate_token_data(cls, project_id: str, project_secret: str):
-        if project_id is None and project_secret is None:
-            raise MaibTokenException('Project ID and Project Secret or Refresh Token are required.')
+        if not project_id or not project_secret:
+            raise MaibTokenException('Project ID and Project Secret are required.')
 
-        token_data = {}
-        if project_id is not None and project_secret is not None:
-            token_data['projectId'] = project_id
-            token_data['projectSecret'] = project_secret
-        elif project_id is not None and project_secret is None:
-            token_data['refreshToken'] = project_id
+        token_data = {
+            'projectId': project_id,
+            'projectSecret': project_secret
+        }
 
         return token_data
+    #endregion
+
+    #region Refresh token API
+    def refresh_token(self, refresh_token: str):
+        """Token generation using Refresh Token
+
+        https://docs.maibmerchants.md/e-commerce/access-token-generation#token-generation-using-refresh-token"""
+
+        token_data = self._build_refresh_token_data(refresh_token=refresh_token)
+        return self._generate_token(data=token_data)
+
+    async def refresh_token_async(self, refresh_token: str):
+        """Token generation using Refresh Token
+
+        https://docs.maibmerchants.md/e-commerce/access-token-generation#token-generation-using-refresh-token"""
+
+        token_data = self._build_refresh_token_data(refresh_token=refresh_token)
+        return await self._generate_token_async(data=token_data)
+
+    @classmethod
+    def _build_refresh_token_data(cls, refresh_token: str):
+        if not refresh_token:
+            raise MaibTokenException('Refresh token is required.')
+
+        token_data = {
+            'refreshToken': refresh_token
+        }
+
+        return token_data
+    #endregion
+
+    #region Generate token
+    def _generate_token(self, data: dict):
+        try:
+            method = 'POST'
+            endpoint = MaibSdk.GENERATE_TOKEN
+            response = self._client.send_request(method=method, url=endpoint, data=data)
+        except Exception as ex:
+            logger.exception(self.__class__.__qualname__)
+            raise MaibTokenException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
+
+        result = self._client.handle_response(response, MaibSdk.GENERATE_TOKEN)
+        return result
+
+    async def _generate_token_async(self, data: dict):
+        try:
+            method = 'POST'
+            endpoint = MaibSdk.GENERATE_TOKEN
+            response = await self._client.send_request_async(method=method, url=endpoint, data=data)
+        except Exception as ex:
+            logger.exception(self.__class__.__qualname__)
+            raise MaibTokenException(f'HTTP error while sending {method} request to endpoint {endpoint}: {ex}') from ex
+
+        result = self._client.handle_response(response, MaibSdk.GENERATE_TOKEN)
+        return result
     #endregion
